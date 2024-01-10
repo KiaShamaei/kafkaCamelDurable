@@ -10,8 +10,8 @@ public class CamelRouter extends RouteBuilder {
     public void configure() throws Exception {
 
         //persist queue with 1000
-//        from("kafka:topic1?brokers=localhost:9092&groupId=task-group")
-        from("seda:topic1")
+        from("kafka:topic1?brokers=localhost:9092&groupId=task-group")
+//        from("seda:topic1")
                 .log("message recevie in camel ")
                 .process(t->{
                     //set for before process
@@ -41,8 +41,7 @@ public class CamelRouter extends RouteBuilder {
                 ).process(p->{
                     var body = (String) p.getIn().getBody().toString();
                     log.info("second process : {} " , body);
-                })
-                .to("kafka:topic1?brokers=localhost:9092&groupId=task-group");
+                });
 
 
 
