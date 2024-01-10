@@ -1,4 +1,6 @@
 package org.example.config;
+import org.apache.camel.Exchange;
+import org.apache.camel.ExchangePropertyKey;
 import org.apache.camel.builder.RouteBuilder;
 
 
@@ -8,29 +10,39 @@ public class CamelRouter extends RouteBuilder {
     public void configure() throws Exception {
 
         //persist queue with 1000
-        from("direct:topic1")
-                .log("message recevie in seda ")
-                .to("seda:eventQueue");
-        // Consume event from SEDA and publish to Kafka
-        from("seda:eventQueue")
-                .log("message get from seda ")
+//        from("kafka:topic1?brokers=localhost:9092&groupId=task-group")
+        from("seda:topic1")
+                .log("message recevie in camel ")
                 .process(t->{
                     //set for before process
-                    var body =(String) t.getIn().getBody();
-                    log.info("before process comes here for ... : {}" , body );
+                    var body = (String) t.getIn().getBody().toString();
+                    var retryCount = t.getIn().getHeader(Exchange.REDELIVERY_COUNTER, Integer.class);
+
+                    if(body.equals("1")){
+                        if(retryCount== 3){
+                            log.info("put it in other queue");
+                        }
+                        else{
+                            throw new RuntimeException("something happen in process");
+                        }
+
+                    }
+                    log.info("the thread in use : {}" , Thread.currentThread().getName());
+                    log.info("process comes here for --------------------------------> : {} {}", body , retryCount);
 
                 })
-                .to("kafka:topic1?brokers=localhost:9092")
                 .errorHandler(defaultErrorHandler()
                         .onExceptionOccurred(p->{
                             //process if exception happen
                             log.info("process if exception goes here ...");})
-                        .maximumRedeliveries(3))
-                .process(exchange -> {
-                    // set for after process
-                    log.info("post process goes here after put kafka from seda successfully {}" , exchange.getIn().getBody().toString());
+                        .maximumRedeliveries(3)
+                        .redeliveryDelay(5000)
 
-                });
+                ).process(p->{
+                    var body = (String) p.getIn().getBody().toString();
+                    log.info("second process : {} " , body);
+                })
+                .to("kafka:topic1?brokers=localhost:9092&groupId=task-group");
 
 
 
