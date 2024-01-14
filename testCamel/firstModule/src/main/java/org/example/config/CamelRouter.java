@@ -2,13 +2,13 @@ package org.example.config;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePropertyKey;
 import org.apache.camel.builder.RouteBuilder;
-
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 public class CamelRouter extends RouteBuilder {
+
     @Override
     public void configure() throws Exception {
-
         //persist queue with 1000
         from("kafka:topic1?brokers=localhost:9092&groupId=task-group")
 //        from("seda:topic1")
@@ -27,6 +27,7 @@ public class CamelRouter extends RouteBuilder {
                         }
 
                     }
+                    Thread.sleep(1000);
                     log.info("the thread in use : {}" , Thread.currentThread().getName());
                     log.info("process comes here for --------------------------------> : {} {}", body , retryCount);
 
@@ -36,7 +37,7 @@ public class CamelRouter extends RouteBuilder {
                             //process if exception happen
                             log.info("process if exception goes here ...");})
                         .maximumRedeliveries(3)
-                        .redeliveryDelay(5000)
+                        .redeliveryDelay(1000)
 
                 ).process(p->{
                     var body = (String) p.getIn().getBody().toString();

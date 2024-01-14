@@ -15,11 +15,17 @@ public class ControllerTest {
     ProducerTemplate producerTemplate;
     @Autowired
     KafkaService kafkaService;
-    @GetMapping("/{id}")
+
+    @GetMapping("/topic1/{id}")
     public String m1(@PathVariable String id){
+        kafkaService.send("topic1","id",id);
+        return " test api read... " + id;
+    }
+    @GetMapping("/topic2/{id}")
+    public String m2(@PathVariable String id){
 //        producerTemplate.asyncSendBody("direct:topic1", "My Event from controller " + id);
-        producerTemplate.sendBody("seda:topic1", "My Event");
-//        kafkaService.send("topic1","id",id);
+//        producerTemplate.sendBody("seda:topic1", "My Event");
+        kafkaService.send("topic2","id",id);
         return " test api read... " + id;
     }
 }
