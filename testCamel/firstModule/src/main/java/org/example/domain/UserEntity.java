@@ -12,6 +12,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @ToString
 @Entity
+@NamedQuery(name = "step1", query = "select x from UserEntity x where x.name = 'kia'")
 public class UserEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
