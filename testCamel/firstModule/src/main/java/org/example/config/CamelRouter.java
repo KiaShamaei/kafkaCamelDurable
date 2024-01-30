@@ -10,7 +10,7 @@ public class CamelRouter extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         //persist queue with 1000
-        from("kafka:topic1?brokers=localhost:9092&groupId=task-group")
+        from("kafka:topic2?brokers=localhost:9092&groupId=task-group")
 //        from("seda:topic1")
                 .log("message recevie in camel ")
                 .process(t->{
@@ -31,7 +31,7 @@ public class CamelRouter extends RouteBuilder {
                     log.info("the thread in use : {}" , Thread.currentThread().getName());
                     log.info("process comes here for --------------------------------> : {} {}", body , retryCount);
 
-                })
+       })
                 .errorHandler(defaultErrorHandler()
                         .onExceptionOccurred(p->{
                             //process if exception happen

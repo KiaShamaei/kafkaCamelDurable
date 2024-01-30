@@ -52,6 +52,7 @@
       <groupId>org.apache.camel.springboot</groupId>
       <artifactId>camel-micrometer-starter</artifactId>
     </dependency>
+    <!--camel-->
     <dependency>
       <groupId>org.apache.camel.springboot</groupId>
       <artifactId>camel-spring-boot</artifactId>
@@ -65,8 +66,29 @@
       <groupId>org.apache.camel.springboot</groupId>
       <artifactId>camel-stream-starter</artifactId>
     </dependency>
-
+    <dependency>
+      <groupId>org.apache.camel.springboot</groupId>
+      <artifactId>camel-csv-starter</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.camel.springboot</groupId>
+      <artifactId>camel-jackson-starter</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.camel.springboot</groupId>
+      <artifactId>camel-jpa-starter</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.camel.springboot</groupId>
+      <artifactId>camel-amqp-starter</artifactId>
+    </dependency>
     <!-- Camel Starter end-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-amqp</artifactId>
+    </dependency>
+
+
 
   </dependencies>
   <dependencyManagement>
